@@ -12,22 +12,36 @@
     <el-slider
       v-model="sliderTime"
       :format-tooltip="formatProcess"
-      @change="changeCurrentTime"
       :class="$style.slider"
+      :max="audioParams.maxTime"
+      @change="changeCurrentTime"
     />
     <div :class="$style.time">
-      <p>{{ formatProcess(audioParams.currentTime, false) }}</p>
-      <p>{{ formatProcess(audioParams.maxTime, false) }}</p>
+      <p>{{ formatProcess(audioParams.currentTime) }}</p>
+      <p>{{ formatProcess(audioParams.maxTime) }}</p>
     </div>
-    <el-button
-      @click="buttonStartPlay"
-      :class="$style.button"
-      circle
-    >
-      <img
-        :src="require(`@/assets/icon/${ audioParams.playing ? 'pause' : 'play' }.svg`)"
-      />
-    </el-button>
+    <div :class="$style.playandsound">
+      <el-button
+        @click="buttonStartPlay"
+        :class="$style.button"
+        circle
+      >
+        <img
+          :src="require(`@/assets/icon/${ audioParams.playing ? 'pause' : 'play' }.svg`)"
+        />
+      </el-button>
+      <div :class="$style.sound">
+        <el-slider
+          v-model="volume"
+          :format-tooltip="formatVolumeToolTip"
+          :class="$style.slider"
+        />
+        <img
+          @click="startMutedOrNot"
+          :src="require(`@/assets/icon/${soundIcon}.svg`)"
+        />
+      </div>
+    </div>
       <!-- <el-button
         type="text"
         @click="changeSpeed"
@@ -47,12 +61,6 @@
       >
         {{ audio.muted | transMutedOrNot }}
       </el-button> -->
-      <!-- <el-slider
-        v-model="volume"
-        :format-tooltip="formatVolumeToolTip"
-        @change="changeVolume"
-        class="slider"
-      /> -->
   </div>
 </template>
 
@@ -86,15 +94,24 @@ export default {
       speeds: this.theSpeeds
     }
   },
+  computed: {
+    soundIcon () {
+      if (this.audioParams.muted) return 'muted'
+      if (this.volume > 50) return 'sound'
+      if (this.volume === 0) return 'soundoff'
+      return 'soundsmall'
+    }
+  },
   methods: {
     // 音檔的秒數
     onLoadedmetadata (res) {
-      this.audioParams.maxTime = numToFixed(res.target.duration, 4)
+      this.audioParams.maxTime = numToFixed(res.target.duration, 0)
     },
     // 每秒會觸發的 callback
     onTimeupdate (res) {
-      this.audioParams.currentTime = res.target.currentTime
-      this.sliderTime = numToFixed((this.audioParams.currentTime / this.audioParams.maxTime * 100), 4)
+      // debugger
+      this.audioParams.currentTime = numToFixed(res.target.currentTime, 0)
+      this.sliderTime = this.audioParams.currentTime
     },
     buttonStartPlay () {
       this.audioParams.playing = !this.audioParams.playing
@@ -106,17 +123,23 @@ export default {
     },
     // 進度條快轉
     changeCurrentTime (index) {
-      console.log(index)
-      this.$refs.audio.currentTime = numToFixed((index / 100 * this.audioParams.maxTime), 4)
+      this.$refs.audio.currentTime = numToFixed(index, 0)
     },
     // 目前秒數
-    formatProcess (index = 0, tooltip = true) {
-      if (tooltip) {
-        index = numToFixed((this.audioParams.maxTime / 100 * index), 0)
-      } else {
-        index = numToFixed(index, 0)
-      }
+    formatProcess (index = 0) {
+      index = numToFixed(index, 0)
       return realFormatSecond(index)
+    },
+    // 音量 & 音量改變
+    formatVolumeToolTip (index) {
+      this.$refs.audio.volume = index / 100
+      this.volume = index
+      return '音量: ' + index
+    },
+    startMutedOrNot () {
+      const muted = !this.audioParams.muted
+      this.audioParams.muted = muted
+      this.$refs.audio.muted = muted
     }
     // changeSpeed () {
     //   const index = this.speeds.indexOf(this.audio.speed) + 1
@@ -127,27 +150,10 @@ export default {
     //   this.$refs.audio.muted = !this.$refs.audio.muted
     //   this.audio.muted = this.$refs.audio.muted
     // },
-    // // 音量条toolTip
-    // formatVolumeToolTip (index) {
-    //   return '音量条: ' + index
-    // },
-    // // 音量改变
-    // changeVolume (index = 0) {
-    //   this.$refs.audio.volume = index / 100
-    //   this.volume = index
-    // },
-    // // 当音频暂停
-    // onPause () {
-    //   this.audio.playing = false
-    // },
     // // 当发生错误, 就出现loading状态
     // onError () {
     //   this.audio.waiting = true
-    // },
-    // // 当音频开始等待
-    // onWaiting (res) {
-    //   console.log(res)
-    // },
+    // }
   }
 }
 </script>
@@ -186,5 +192,23 @@ export default {
 
 .dn {
   display: none;
+}
+
+.playandsound {
+  width: 100%; //
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
+
+  .sound {
+    width: 200px;
+    display: flex;
+    align-items: center;
+
+    .slider {
+      margin-right: 25px
+    }
+  }
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div :class="$style.root" v-if="data">
-    <el-card :class="$style.card">
+    <!-- <el-card :class="$style.card">
       <div :class="$style.innercard">
         <img :src="data.image.url" :class="$style.img"/>
         <div :class="$style.discription">
@@ -8,16 +8,16 @@
           <p>{{ data.itunes.author }}</p>
         </div>
       </div>
-    </el-card>
+    </el-card> -->
     <el-card
       :class="$style.card"
     >
       <div :class="$style.innercard">
-        <img :src="data.items[0].itunes.image" :class="$style.img"/>
+        <!-- <img :src="data.items[0].itunes.image" :class="$style.img"/>
         <div :class="$style.discription">
           <p>{{ data.items[0].title }}</p>
           <p v-html="data.items[0].content"></p>
-        </div>
+        </div> -->
         <AudioComponent
           :class="$style.audioCSS"
           :theUrl="data.items[0].enclosure.url"
