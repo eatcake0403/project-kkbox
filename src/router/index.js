@@ -12,9 +12,12 @@ const routes = [
     component: Home
   },
   {
-    path: '/Episode',
+    path: '/Episode/:index',
     name: 'Episode',
-    component: Episode
+    component: Episode,
+    props: (route) => ({
+      index: Number(route.params.index)
+    })
   }
 ]
 

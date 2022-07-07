@@ -1,36 +1,38 @@
 <template>
   <div :class="$style.root">
-    <Author/>
-    <Catalogs :class="$style.catalogs"/>
-  </div>
-          <!-- <div :class="$style.innercard">
-        <img :src="data.image.url" :class="$style.img"/>
-        <div :class="$style.discription">
-          <p>{{ data.title }}</p>
-          <p>{{ data.itunes.author }}</p>
-        </div>
-      </div> -->
-    <!-- <el-card
-      :class="$style.card"
-      v-for="(item) in data.items"
-      :key="item.guid"
+    <Author
+      @toSoundPage="soundPage($event)"
+    />
+    <RecycleScroller
+      :class="$style.catalogs"
+      :items="podcastData.items"
+      :item-size="220"
+      key-field="guid"
+      v-slot="{ item, index }"
     >
-      <div :class="$style.innercard">
-        <img :src="item.itunes.image" :class="$style.img"/>
-        <div :class="$style.discription">
-          <p>{{ item.title }}</p>
-          <p v-html="item.content"></p>
-        </div>
-      </div>
-    </el-card> -->
+      <Catalog
+        :catalogData="{ item, index }"
+        @cardEvent="soundPage($event)"
+      />
+    </RecycleScroller>
+  </div>
 </template>
 
 <script>
-import { Author, Catalogs } from '@/components'
+import { mapState } from 'vuex'
+import { Author, Catalog } from '@/components'
 export default {
   components: {
     Author,
-    Catalogs
+    Catalog
+  },
+  computed: {
+    ...mapState(['podcastData'])
+  },
+  methods: {
+    soundPage (index = 0) {
+      this.$router.push({ name: 'Episode', params: { index } })
+    }
   }
 }
 </script>

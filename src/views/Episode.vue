@@ -1,65 +1,65 @@
 <template>
-  <div :class="$style.root" v-if="data">
-    <!-- <el-card :class="$style.card">
-      <div :class="$style.innercard">
-        <img :src="data.image.url" :class="$style.img"/>
-        <div :class="$style.discription">
-          <p>{{ data.title }}</p>
-          <p>{{ data.itunes.author }}</p>
-        </div>
-      </div>
-    </el-card> -->
-    <el-card
-      :class="$style.card"
+  <div
+    v-if="podcastData"
+  >
+    <Catalog
+      :catalogData="{ item: podcastData.items[index], index: index }"
+      :catalog="true"
     >
-      <div :class="$style.innercard">
-        <!-- <img :src="data.items[0].itunes.image" :class="$style.img"/>
-        <div :class="$style.discription">
-          <p>{{ data.items[0].title }}</p>
-          <p v-html="data.items[0].content"></p>
-        </div> -->
-        <AudioComponent
-          :class="$style.audioCSS"
-          :theUrl="data.items[0].enclosure.url"
-          :type="data.items[0].enclosure.type"
-        />
-      </div>
-    </el-card>
+      <template #bottom>
+        <el-button
+          round
+          type="primary"
+          @click="play"
+          :disabled="playing"
+        >
+          開始播放
+        </el-button>
+      </template>
+    </Catalog>
+    <AudioComponent
+      v-show="playing"
+      :class="$style.audioCSS"
+      :theUrl="podcastData.items[index].enclosure.url"
+      ref="AudioComponent"
+    />
   </div>
 </template>
 
 <script>
-import { AudioComponent } from '@/components'
+import { Catalog, AudioComponent } from '@/components'
 import { mapState } from 'vuex'
 export default {
+  props: {
+    // router
+    index: {
+      type: Number,
+      default: 0
+    }
+  },
+  data () {
+    return {
+      playing: false
+    }
+  },
   components: {
+    Catalog,
     AudioComponent
   },
   computed: {
-    ...mapState(['data'])
+    ...mapState(['podcastData'])
+  },
+  methods: {
+    play () {
+      if (this.playing) return
+      this.playing = true
+      this.$refs.AudioComponent.buttonStartPlay()
+    }
   }
 }
 </script>
 
 <style lang="scss" module>
-.root {
-  width: 100%;
-}
-
-.card {
-  height: 500px;
-}
-
-.img {
-  width: 300px;
-  height: 300px;
-  object-fit: contain;
-}
-
-.innercard {
-  display: flex;
-}
-
 .audioCSS {
   position: fixed;
   bottom: 0;

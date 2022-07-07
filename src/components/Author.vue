@@ -30,6 +30,7 @@
             type="primary"
             round
             icon="el-icon-caret-right"
+            @click="toSoundPage('new')"
           >
             最新單集
           </el-button>
@@ -37,6 +38,7 @@
             type="info"
             round
             icon="el-icon-question"
+            @click="toSoundPage('random')"
           >
             隨機播放
           </el-button>
@@ -53,10 +55,25 @@
 
 <script>
 import { mapState } from 'vuex'
+import { randomNum } from '@/mixins'
 export default {
   name: 'Author',
   computed: {
     ...mapState(['podcastData'])
+  },
+  methods: {
+    toSoundPage (type) {
+      if (type === 'random') {
+        // randomNum range
+        // ex: length = 5
+        // range to 0~4
+        const length = this.podcastData.items.length
+        const random = randomNum(length)
+        this.$emit('toSoundPage', random)
+      } else {
+        this.$emit('toSoundPage', 0)
+      }
+    }
   }
 }
 </script>
@@ -68,7 +85,7 @@ export default {
   display: grid;
   grid-template-columns: 300px auto;
   grid-template-rows: minmax(300px, auto);
-  column-gap: 50px;
+  column-gap: 20px;
 
   .img {
     width: 100%;
@@ -77,7 +94,7 @@ export default {
   }
 
   .card {
-    padding: 30px 30px 0 30px;
+    padding: 10px 30px 0 30px;
 
     .title {
       font-weight: bold;

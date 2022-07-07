@@ -1,5 +1,5 @@
 <template>
-  <div :class="$style.root" v-if="theUrl">
+  <div :class="$style.root">
     <audio
       ref="audio"
       preload="auto"
@@ -138,10 +138,6 @@ export default {
       this.audioParams.speedIndex = (index >= speeds.length) ? 0 : index
       this.$refs.audio.playbackRate = speeds[this.audioParams.speedIndex]
     }
-    // // 当发生错误, 就出现loading状态
-    // onError () {
-    //   this.audio.waiting = true
-    // }
   }
 }
 </script>

@@ -8,8 +8,9 @@ export function realFormatSecond (second) {
 }
 
 export function numToFixed (num, point) {
-  if (!String(num) || !String(point)) {
-    throw Error('沒有數字參數與小數點後幾位參數')
-  }
   return Number(Number(num).toFixed(point))
+}
+
+export function randomNum (len) {
+  return Math.floor(Math.random() * len)
 }

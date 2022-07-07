@@ -1,5 +1,5 @@
 import AudioComponent from '@/components/AudioComponent.vue'
 import Author from '@/components/Author.vue'
-import Catalogs from '@/components/Catalogs.vue'
+import Catalog from '@/components/Catalog.vue'
 
-export { AudioComponent, Author, Catalogs }
+export { AudioComponent, Author, Catalog }
