@@ -11,23 +11,30 @@
     </el-card>
     <el-card
       :class="$style.card"
-      v-for="(item) in data.items"
-      :key="item.guid"
     >
       <div :class="$style.innercard">
-        <img :src="item.itunes.image" :class="$style.img"/>
+        <img :src="data.items[0].itunes.image" :class="$style.img"/>
         <div :class="$style.discription">
-          <p>{{ item.title }}</p>
-          <p v-html="item.content"></p>
+          <p>{{ data.items[0].title }}</p>
+          <p v-html="data.items[0].content"></p>
         </div>
+        <AudioComponent
+          :class="$style.audioCSS"
+          :theUrl="data.items[0].enclosure.url"
+          :type="data.items[0].enclosure.type"
+        />
       </div>
     </el-card>
   </div>
 </template>
 
 <script>
+import { AudioComponent } from '@/components'
 import { mapState } from 'vuex'
 export default {
+  components: {
+    AudioComponent
+  },
   computed: {
     ...mapState(['data'])
   }
@@ -51,5 +58,11 @@ export default {
 
 .innercard {
   display: flex;
+}
+
+.audioCSS {
+  position: fixed;
+  bottom: 0;
+  left: 0;
 }
 </style>
