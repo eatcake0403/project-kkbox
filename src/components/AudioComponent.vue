@@ -7,6 +7,7 @@
       :src="theUrl"
       @loadedmetadata="onLoadedmetadata"
       @timeupdate="onTimeupdate"
+      @pause="audioParams.playing = false"
     />
     <el-slider
       v-model="sliderTime"
@@ -15,8 +16,8 @@
       :class="$style.slider"
     />
     <div :class="$style.time">
-      <p>{{ formatProcess() }}</p>
-      <p>{{ audioParams.maxTime }}</p>
+      <p>{{ formatProcess(audioParams.currentTime, false) }}</p>
+      <p>{{ formatProcess(audioParams.maxTime, false) }}</p>
     </div>
     <el-button
       @click="buttonStartPlay"
@@ -105,12 +106,16 @@ export default {
     },
     // 進度條快轉
     changeCurrentTime (index) {
+      console.log(index)
       this.$refs.audio.currentTime = numToFixed((index / 100 * this.audioParams.maxTime), 4)
     },
     // 目前秒數
-    formatProcess (index = 0) {
-      console.log(index)
-      index = numToFixed((this.audioParams.maxTime / 100 * index), 0)
+    formatProcess (index = 0, tooltip = true) {
+      if (tooltip) {
+        index = numToFixed((this.audioParams.maxTime / 100 * index), 0)
+      } else {
+        index = numToFixed(index, 0)
+      }
       return realFormatSecond(index)
     }
     // changeSpeed () {
