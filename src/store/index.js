@@ -5,11 +5,11 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    data: null
+    podcastData: null
   },
   mutations: {
-    data (store, payload) {
-      store.data = payload.data
+    podcastData (store, { podcastData }) {
+      store.podcastData = podcastData
     }
   },
   actions: {

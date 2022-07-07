@@ -15,9 +15,9 @@ Vue.use(ElementUI)
 
 async function getData () {
   const url = '/podcasts/954689a5-3096-43a4-a80b-7810b219cef3.xml'
-  const feed = await parser.parseURL(url)
-  console.log(feed)
-  store.commit({ type: 'data', data: feed })
+  const feeds = await parser.parseURL(url)
+  console.log(feeds)
+  store.commit({ type: 'podcastData', podcastData: feeds })
 
   new Vue({
     router,
