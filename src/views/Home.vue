@@ -1,6 +1,7 @@
 <template>
-  <div>
+  <div :class="$style.root">
     <Author/>
+    <Catalogs :class="$style.catalogs"/>
   </div>
           <!-- <div :class="$style.innercard">
         <img :src="data.image.url" :class="$style.img"/>
@@ -25,10 +26,24 @@
 </template>
 
 <script>
-import { Author } from '@/components'
+import { Author, Catalogs } from '@/components'
 export default {
   components: {
-    Author
+    Author,
+    Catalogs
   }
 }
 </script>
+
+<style lang="scss" module>
+.root {
+  display: flex;
+  flex-direction: column;
+}
+
+.catalogs  {
+  flex: 1;
+  border: 1px solid #000;
+
+}
+</style>

@@ -58,12 +58,6 @@
         />
       </div>
     </div>
-      <!-- <el-button
-        type="text"
-        @click="changeSpeed"
-      >
-        {{ audio.speed | transSpeed }}
-      </el-button> -->
   </div>
 </template>
 

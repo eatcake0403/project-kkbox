@@ -54,6 +54,7 @@
 <script>
 import { mapState } from 'vuex'
 export default {
+  name: 'Author',
   computed: {
     ...mapState(['podcastData'])
   }
@@ -123,9 +124,5 @@ export default {
       color: $grey-ligth;
     }
   }
-}
-
-.innercard {
-  display: flex;
 }
 </style>

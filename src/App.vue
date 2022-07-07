@@ -7,8 +7,10 @@
 
 #app {
   font-family: 'Noto Sans TC', sans-serif;
-  width: 100%;
+  width: 100vw;
+  height: 100vh;
   min-width: 1366px;
+  min-width: 768px;
   overflow: auto;
 }
 </style>
