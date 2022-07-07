@@ -4,7 +4,7 @@
     @click.native="$emit('cardEvent', catalogData.index)"
   >
     <div :class="$style.card">
-      <div :class="[{ [$style.catalogimg]: catalog }]">
+      <div :class="$style.catalogDataImg">
         <img :src="catalogData.item.itunes.image" :class="$style.img"/>
         <slot name="bottom"/>
       </div>
@@ -65,13 +65,18 @@ export default {
       overflow-y: auto;
       height: 93vh;
     }
+
+    .catalogDataImg {
+      display: flex;
+      flex-direction: column;
+      margin-right: 20px;
+    }
   }
 
   .img {
     width: 160px;
     height: 160px;
     object-fit: contain;
-    margin-right: 10px;
   }
 
   .date {

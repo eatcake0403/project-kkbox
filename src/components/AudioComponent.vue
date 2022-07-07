@@ -8,6 +8,7 @@
       @loadedmetadata="onLoadedmetadata"
       @timeupdate="onTimeupdate"
       @pause="audioParams.playing = false"
+      @ended="onEnded"
     />
     <el-slider
       v-model="sliderTime"
@@ -97,6 +98,7 @@ export default {
     // 音檔的秒數
     onLoadedmetadata (res) {
       this.audioParams.maxTime = numToFixed(res.target.duration, 0)
+      this.$emit('loadedmetadata')
     },
     // 每秒會觸發的 callback
     onTimeupdate (res) {
@@ -137,6 +139,9 @@ export default {
       const index = this.audioParams.speedIndex + 1
       this.audioParams.speedIndex = (index >= speeds.length) ? 0 : index
       this.$refs.audio.playbackRate = speeds[this.audioParams.speedIndex]
+    },
+    onEnded () {
+      this.$emit('ended')
     }
   }
 }
