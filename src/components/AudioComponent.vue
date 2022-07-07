@@ -17,19 +17,35 @@
       @change="changeCurrentTime"
     />
     <div :class="$style.time">
-      <p>{{ formatProcess(audioParams.currentTime) }}</p>
+      <div>
+        {{ formatProcess(audioParams.currentTime) }}
+        <span :class="$style.speed">
+          {{ 'x ' + speeds[audioParams.speedIndex] }}
+        </span>
+      </div>
       <p>{{ formatProcess(audioParams.maxTime) }}</p>
     </div>
     <div :class="$style.playandsound">
-      <el-button
-        @click="buttonStartPlay"
-        :class="$style.button"
-        circle
-      >
-        <img
-          :src="require(`@/assets/icon/${ audioParams.playing ? 'pause' : 'play' }.svg`)"
-        />
-      </el-button>
+      <div>
+        <el-button
+          @click="buttonStartPlay"
+          :class="$style.button"
+          circle
+        >
+          <img
+            :src="require(`@/assets/icon/${ audioParams.playing ? 'pause' : 'play' }.svg`)"
+          />
+        </el-button>
+        <el-button
+          :class="$style.button"
+          circle
+          @click="changeSpeed"
+        >
+          <img
+            src="@/assets/icon/speed.svg"
+          />
+        </el-button>
+      </div>
       <div :class="$style.sound">
         <el-slider
           v-model="volume"
@@ -48,19 +64,6 @@
       >
         {{ audio.speed | transSpeed }}
       </el-button> -->
-      <!-- <el-tag
-        type="info">
-        {{ audio.currentTime | formatSecond }}
-      </el-tag> -->
-      <!-- <el-tag type="info">
-        {{ audio.maxTime | formatSecond }}
-      </el-tag> -->
-      <!-- <el-button
-        type="text"
-        @click="startMutedOrNot"
-      >
-        {{ audio.muted | transMutedOrNot }}
-      </el-button> -->
   </div>
 </template>
 
@@ -72,12 +75,6 @@ export default {
     theUrl: {
       type: String,
       required: true
-    },
-    theSpeeds: {
-      type: Array,
-      default () {
-        return [1, 1.5, 2]
-      }
     }
   },
   data () {
@@ -87,11 +84,11 @@ export default {
         maxTime: 0,
         playing: false,
         muted: false,
-        speed: 1
+        speedIndex: 3
       },
       sliderTime: 0,
       volume: 100,
-      speeds: this.theSpeeds
+      speeds: [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2]
     }
   },
   computed: {
@@ -140,16 +137,13 @@ export default {
       const muted = !this.audioParams.muted
       this.audioParams.muted = muted
       this.$refs.audio.muted = muted
+    },
+    changeSpeed () {
+      const speeds = this.speeds
+      const index = this.audioParams.speedIndex + 1
+      this.audioParams.speedIndex = (index >= speeds.length) ? 0 : index
+      this.$refs.audio.playbackRate = speeds[this.audioParams.speedIndex]
     }
-    // changeSpeed () {
-    //   const index = this.speeds.indexOf(this.audio.speed) + 1
-    //   this.audio.speed = this.speeds[index % this.speeds.length]
-    //   this.$refs.audio.playbackRate = this.audio.speed
-    // },
-    // startMutedOrNot () {
-    //   this.$refs.audio.muted = !this.$refs.audio.muted
-    //   this.audio.muted = this.$refs.audio.muted
-    // },
     // // 当发生错误, 就出现loading状态
     // onError () {
     //   this.audio.waiting = true
@@ -176,7 +170,7 @@ export default {
   justify-content: space-between;
   color: #fff;
   font-weight: bold;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .slider {
@@ -210,5 +204,10 @@ export default {
       margin-right: 25px
     }
   }
+}
+
+.speed {
+  margin-top: 10px;
+  font-size: 12px;
 }
 </style>
