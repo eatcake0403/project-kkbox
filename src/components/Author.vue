@@ -65,7 +65,6 @@ export default {
 @import 'src/SCSS/index.scss';
 
 .header {
-  padding: 50px;
   display: grid;
   grid-template-columns: 300px auto;
   grid-template-rows: minmax(300px, auto);
@@ -121,7 +120,7 @@ export default {
       margin-top: 20px;
       text-align: right;
       font-size: $text-size;
-      color: $grey-ligth;
+      color: $grey-light;
     }
   }
 }

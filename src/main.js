@@ -6,7 +6,6 @@ import Parser from 'rss-parser'
 import ElementUI from 'element-ui'
 import VueVirtualScroller from 'vue-virtual-scroller'
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
-import 'normalize.css/normalize.css'
 import 'element-ui/lib/theme-chalk/index.css'
 import 'reset-css'
 

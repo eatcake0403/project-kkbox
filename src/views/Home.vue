@@ -37,13 +37,14 @@ export default {
 
 <style lang="scss" module>
 .root {
+  box-sizing: border-box;
+  padding: 30px;
   display: flex;
   flex-direction: column;
 }
 
 .catalogs  {
+  margin-top: 20px;
   flex: 1;
-  border: 1px solid #000;
-
 }
 </style>
