@@ -31,6 +31,7 @@
             round
             icon="el-icon-caret-right"
             @click="toSoundPage('new')"
+            id="btnSoundtoNew"
           >
             最新單集
           </el-button>
@@ -39,6 +40,7 @@
             round
             icon="el-icon-question"
             @click="toSoundPage('random')"
+            id="btnSoundtoRandom"
           >
             隨機播放
           </el-button>

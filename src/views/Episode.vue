@@ -13,6 +13,7 @@
           @click="play"
           :disabled="playing"
           :class="$style.btn"
+          id="playerBtn"
         >
           開始播放
         </el-button>

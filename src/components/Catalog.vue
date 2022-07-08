@@ -1,5 +1,6 @@
 <template>
   <el-card
+    data-catalog
     :class="[$style.contents, { [$style.catalog]: catalog }]"
     @click.native="$emit('cardEvent', catalogData.index)"
   >

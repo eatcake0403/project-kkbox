@@ -1,6 +1,7 @@
 <template>
-  <div :class="$style.root">
+  <div :class="$style.root" id="AudioComponent">
     <audio
+      id="audioId"
       ref="audio"
       preload="auto"
       :class="$style.dn"
