@@ -43,15 +43,15 @@ export default {
       default: 0
     }
   },
+  components: {
+    Catalog,
+    AudioComponent
+  },
   data () {
     return {
       playing: false,
       autoPlay: false
     }
-  },
-  components: {
-    Catalog,
-    AudioComponent
   },
   computed: {
     ...mapState(['podcastData'])
@@ -76,14 +76,31 @@ export default {
         }
       })
     },
-    changeSound (type) {
+    checked (type) {
       const len = this.podcastData.items.length
       // 為最新 沒有下一篇
-      if (type === 'next' && (this.index <= 0)) return
+      if ((type === 'next') && (this.index <= 0)) {
+        this.$notify({
+          title: '已經是最新的一集了！',
+          position: 'bottom-left'
+        })
+        return false
+      }
       // 為最舊 沒有上一篇
-      if (type === 'previous' && (this.index >= len)) return
+      if ((type === 'previous') && (this.index >= len - 1)) {
+        this.$notify({
+          title: '已經是最舊的一集了！',
+          position: 'bottom-left'
+        })
+        return false
+      }
       this.$refs.AudioComponent.audioParams.playing = false
       this.autoPlay = true
+      this.$refs.AudioComponent.audioParams.speedIndex = 3
+      return true
+    },
+    changeSound (type) {
+      if (!this.checked(type)) return
       this.$router.push({
         name: 'Episode',
         params: {
@@ -92,27 +109,14 @@ export default {
       })
     },
     episodeAssign (type) {
+      if (!this.checked(type === 'new' ? 'next' : 'previous')) return
       const len = this.podcastData.items.length
-      if (type === 'new' && this.index <= 0) {
-        this.$notify({
-          title: '已經是最新的一集了！',
-          position: 'bottom-left'
-        })
-      } else if (type === 'old' && (this.index >= len - 1)) {
-        this.$notify({
-          title: '已經是最舊的一集了！',
-          position: 'bottom-left'
-        })
-      } else {
-        this.$refs.AudioComponent.audioParams.playing = false
-        this.autoPlay = true
-        this.$router.push({
-          name: 'Episode',
-          params: {
-            index: (type === 'new' ? 0 : len - 1)
-          }
-        })
-      }
+      this.$router.push({
+        name: 'Episode',
+        params: {
+          index: (type === 'new' ? 0 : len - 1)
+        }
+      })
     }
   }
 }

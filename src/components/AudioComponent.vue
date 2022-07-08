@@ -10,14 +10,19 @@
       @timeupdate="onTimeupdate"
       @pause="audioParams.playing = false"
       @ended="onEnded"
+      @error="onError"
     />
-    <div @click="collapse = !collapse" :class="$style.btncollapse">
-      <img :src="require(`@/assets/icon/${ collapse ? 'collapseup' : 'collapsedown' }.svg`)">
+    <div :class="$style.btncollapse">
+      <img
+        :src="require(`@/assets/icon/${ collapse ? 'collapseup' : 'collapsedown' }.svg`)"
+        @click="collapse = !collapse"
+        :class="$style.cursorpointer"
+      >
     </div>
     <el-slider
       v-model="sliderTime"
       :format-tooltip="formatProcess"
-      :class="$style.slider"
+      :class="[$style.slider, $style.none]"
       :max="audioParams.maxTime"
       @change="changeCurrentTime"
     />
@@ -36,7 +41,7 @@
           <el-button
             :class="$style.button"
             circle
-            @click="changeSpeed"
+            @click="changeSpeed(false)"
           >
             <img
               src="@/assets/icon/speed.svg"
@@ -97,6 +102,7 @@
         />
         <img
           @click="startMutedOrNot"
+          :class="$style.cursorpointer"
           :src="require(`@/assets/icon/${soundIcon}.svg`)"
         />
       </div>
@@ -177,14 +183,23 @@ export default {
       this.audioParams.muted = muted
       this.$refs.audio.muted = muted
     },
-    changeSpeed () {
+    changeSpeed (changeSound) {
       const speeds = this.speeds
-      const index = this.audioParams.speedIndex + 1
-      this.audioParams.speedIndex = (index >= speeds.length) ? 0 : index
+      if (!changeSound) {
+        const index = this.audioParams.speedIndex + 1
+        this.audioParams.speedIndex = (index >= speeds.length) ? 0 : index
+      }
       this.$refs.audio.playbackRate = speeds[this.audioParams.speedIndex]
     },
     onEnded () {
       this.$emit('ended')
+    },
+    onError () {
+      this.$notify({
+        type: 'error',
+        title: 'oops! 檔案發生錯誤',
+        position: 'bottom-left'
+      })
     }
   }
 }
@@ -194,6 +209,7 @@ export default {
 @import 'src/SCSS/index.scss';
 
 .root {
+  border-radius: 35px 35px 0 0;
   padding: 20px;
   box-sizing: border-box;
   width: 100%;
@@ -205,17 +221,21 @@ export default {
 
   &.close {
     justify-content: flex-start;
-    height: 58px;
+    height: 50px;
+    width: 100px;
     overflow: hidden;
   }
+}
+
+.cursorpointer {
+  cursor: pointer;
 }
 
 .btncollapse {
   width: 100%;
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   height: 30px;
-  cursor: pointer;
 }
 
 .time {
@@ -230,9 +250,11 @@ export default {
 .slider {
   width: 100%;
   margin: 0 auto;
+
   :global(.el-slider__button) {
     border-color: $primary;
   }
+
   :global(.el-slider__bar) {
     background: $primary;
   }

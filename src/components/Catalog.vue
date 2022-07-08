@@ -52,6 +52,7 @@ export default {
 
   &.catalog {
     height: 97vh;
+    cursor: default;
   }
 
   &:hover {
@@ -65,6 +66,7 @@ export default {
     .discription {
       overflow-y: auto;
       height: 93vh;
+      width: 100%;
     }
 
     .catalogDataImg {

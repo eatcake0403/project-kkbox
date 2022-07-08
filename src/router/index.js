@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Home from '@/views/Home.vue'
 import Episode from '@/views/Episode.vue'
 import PageNotFound from '@/views/PageNotFound.vue'
+import store from '@/store'
 
 Vue.use(VueRouter)
 
@@ -18,12 +19,23 @@ const routes = [
     component: Episode,
     props: (route) => ({
       index: Number(route.params.index)
-    })
+    }),
+    beforeEnter: (to, from, next) => {
+      if (store.state.podcastData.items[to.params.index]) {
+        next()
+      } else {
+        next({ name: 'PageNotFound' })
+      }
+    }
+  },
+  {
+    path: 'PageNotFound',
+    name: 'PageNotFound',
+    component: PageNotFound
   },
   {
     path: '*',
-    name: 'PageNotFound',
-    component: PageNotFound
+    redirect: { name: 'PageNotFound' }
   }
 ]
 
