@@ -126,6 +126,8 @@ export default {
 }
 
 .btn {
-  margin-top: 20px;
+  &:global(.el-button) {
+    margin-top: 20px;
+  }
 }
 </style>
