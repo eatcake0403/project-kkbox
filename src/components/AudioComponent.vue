@@ -1,5 +1,5 @@
 <template>
-  <div :class="$style.root" id="AudioComponent">
+  <div :class="[$style.root, { [$style.close]: collapse }]" id="AudioComponent">
     <audio
       id="audioId"
       ref="audio"
@@ -11,6 +11,9 @@
       @pause="audioParams.playing = false"
       @ended="onEnded"
     />
+    <div @click="collapse = !collapse" :class="$style.btncollapse">
+      <img :src="require(`@/assets/icon/${ collapse ? 'collapseup' : 'collapsedown' }.svg`)">
+    </div>
     <el-slider
       v-model="sliderTime"
       :format-tooltip="formatProcess"
@@ -122,7 +125,8 @@ export default {
       },
       sliderTime: 0,
       volume: 50,
-      speeds: [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2]
+      speeds: [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2],
+      collapse: false
     }
   },
   computed: {
@@ -198,6 +202,20 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  &.close {
+    justify-content: flex-start;
+    height: 58px;
+    overflow: hidden;
+  }
+}
+
+.btncollapse {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  height: 30px;
+  cursor: pointer;
 }
 
 .time {
