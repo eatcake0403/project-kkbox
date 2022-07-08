@@ -28,25 +28,63 @@
       <p>{{ formatProcess(audioParams.maxTime) }}</p>
     </div>
     <div :class="$style.playandsound">
-      <div>
-        <el-button
-          @click="buttonStartPlay"
-          :class="$style.button"
-          circle
-        >
-          <img
-            :src="require(`@/assets/icon/${ audioParams.playing ? 'pause' : 'play' }.svg`)"
-          />
-        </el-button>
-        <el-button
-          :class="$style.button"
-          circle
-          @click="changeSpeed"
-        >
-          <img
-            src="@/assets/icon/speed.svg"
-          />
-        </el-button>
+      <div :class="$style.btns">
+        <div>
+          <el-button
+            :class="$style.button"
+            circle
+            @click="changeSpeed"
+          >
+            <img
+              src="@/assets/icon/speed.svg"
+            />
+          </el-button>
+        </div>
+        <div>
+          <el-button
+            @click="$emit('changeSound', 'previous')"
+            :class="$style.button"
+            circle
+          >
+            <img
+              src="@/assets/icon/previous.svg"
+            />
+          </el-button>
+          <el-button
+            @click="buttonStartPlay"
+            :class="$style.button"
+            circle
+          >
+            <img
+              :src="require(`@/assets/icon/${ audioParams.playing ? 'pause' : 'play' }.svg`)"
+            />
+          </el-button>
+          <el-button
+            @click="$emit('changeSound', 'next')"
+            :class="$style.button"
+            circle
+          >
+            <img
+              src="@/assets/icon/next.svg"
+            />
+          </el-button>
+        </div>
+        <div>
+          <el-button
+            :class="$style.button"
+            round
+            @click="$emit('episodeAssign', 'new')"
+          >
+            最新一集
+          </el-button>
+          <el-button
+            :class="$style.button"
+            round
+            @click="$emit('episodeAssign', 'old')"
+          >
+            最舊一集
+          </el-button>
+        </div>
       </div>
       <div :class="$style.sound">
         <el-slider
@@ -83,7 +121,7 @@ export default {
         speedIndex: 3
       },
       sliderTime: 0,
-      volume: 100,
+      volume: 50,
       speeds: [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2]
     }
   },
@@ -149,11 +187,13 @@ export default {
 </script>
 
 <style lang="scss" module>
+@import 'src/SCSS/index.scss';
+
 .root {
   padding: 20px;
   box-sizing: border-box;
   width: 100%;
-  background: #204e7882;
+  background: $primary-alpha;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -164,19 +204,19 @@ export default {
   width: 100%;
   display: flex;
   justify-content: space-between;
-  color: #fff;
+  color: $white;
   font-weight: bold;
-  font-size: 16px;
+  font-size: $time-size;
 }
 
 .slider {
   width: 100%;
   margin: 0 auto;
   :global(.el-slider__button) {
-    border-color: rgba(84, 111, 136, 1);
+    border-color: $primary;
   }
   :global(.el-slider__bar) {
-    background: rgba(84, 111, 136, 1);
+    background: $primary;
   }
 }
 
@@ -185,11 +225,23 @@ export default {
 }
 
 .playandsound {
-  width: 100%; //
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-top: 20px;
+
+  .btns {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-right: 30px;
+
+    .button {
+      margin: 0 10px;
+    }
+  }
 
   .sound {
     width: 200px;
@@ -204,6 +256,6 @@ export default {
 
 .speed {
   margin-top: 10px;
-  font-size: 12px;
+  font-size: $date-size;
 }
 </style>

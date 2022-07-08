@@ -26,6 +26,8 @@
       ref="AudioComponent"
       @ended="onEnded"
       @loadedmetadata="onLoadedmetadata"
+      @changeSound="changeSound($event)"
+      @episodeAssign="episodeAssign($event)"
     />
   </div>
 </template>
@@ -65,10 +67,52 @@ export default {
       this.$refs.AudioComponent.buttonStartPlay()
     },
     onEnded () {
-      const length = this.podcastData.items.length
-      if (length === (this.index + 1)) return
+      if (this.index <= 0) return
       this.autoPlay = true
-      this.$router.push({ name: 'Episode', params: { index: this.index + 1 } })
+      this.$router.push({
+        name: 'Episode',
+        params: {
+          index: (this.index - 1)
+        }
+      })
+    },
+    changeSound (type) {
+      const len = this.podcastData.items.length
+      // 為最新 沒有下一篇
+      if (type === 'next' && (this.index <= 0)) return
+      // 為最舊 沒有上一篇
+      if (type === 'previous' && (this.index >= len)) return
+      this.$refs.AudioComponent.audioParams.playing = false
+      this.autoPlay = true
+      this.$router.push({
+        name: 'Episode',
+        params: {
+          index: (type === 'next' ? this.index - 1 : this.index + 1)
+        }
+      })
+    },
+    episodeAssign (type) {
+      const len = this.podcastData.items.length
+      if (type === 'new' && this.index <= 0) {
+        this.$notify({
+          title: '已經是最新的一集了！',
+          position: 'bottom-left'
+        })
+      } else if (type === 'old' && (this.index >= len - 1)) {
+        this.$notify({
+          title: '已經是最舊的一集了！',
+          position: 'bottom-left'
+        })
+      } else {
+        this.$refs.AudioComponent.audioParams.playing = false
+        this.autoPlay = true
+        this.$router.push({
+          name: 'Episode',
+          params: {
+            index: (type === 'new' ? 0 : len - 1)
+          }
+        })
+      }
     }
   }
 }
